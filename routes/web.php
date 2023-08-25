@@ -30,7 +30,7 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/companies', [CompanyController::class, "index"])->middleware(['auth','admin', 'verified'])->name('companies');
-Route::get('/employees', [EmployeeController::class, "index"])->middleware(['auth','admin', 'verified'])->name('employees');
+Route::resource('companies', CompanyController::class);
+Route::resource('employees', EmployeeController::class);
 
 require __DIR__.'/auth.php';

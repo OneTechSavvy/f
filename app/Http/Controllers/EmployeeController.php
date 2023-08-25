@@ -3,6 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Employee;
+use App\Models\Company;
+use App\Http\Resources\EmployeeResource;
+use App\Http\Resources\CompanySelectResource;
+use App\Http\Requests\StoreEmployeeRequest;
+use App\Http\Requests\UpdateEmployeeRequest;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -17,10 +22,42 @@ class EmployeeController extends Controller
     {
         $employees = Employee::with("company:id,name");
         $company_id = $request->company_id;
+        $search = $request->search;
         if($company_id)
             $employees = $employees->where('company_id', $company_id);
+        if($search)
+            $employees = $employees->where(function($query){
+                $query->where('first_name', 'like', '%{$search}%')
+                    ->orWhere('last_name', 'like', '%{$search}%')
+                    ->orWhere('email', 'like', '%{$search}%')
+                    ->orWhere('phone', 'like', '%{$search}%');
+            });
         $employees = $employees->paginate(10);
-        return Inertia::render('Employees', compact("employees", "company_id"));
+        return Inertia::render('Employees/Index', compact("employees", "company_id"));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        $companies = CompanySelectResource::collection(Company::all());
+        return Inertia::render('Employees/Create', compact("companies"));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        $employee = new EmployeeResource(Employee::find($id));
+        $companies = CompanySelectResource::collection(Company::all());
+        return Inertia::render('Employees/Edit', compact("employee", "companies"));
     }
 
     /**
@@ -29,8 +66,11 @@ class EmployeeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreEmployeeRequest $request)
     {
+        Employee::create($request->validated());
+
+        return redirect('employees');
         //
     }
 
@@ -52,9 +92,10 @@ class EmployeeController extends Controller
      * @param  \App\Models\Employee  $employee
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Employee $employee)
+    public function update(UpdateEmployeeRequest $request, $id)
     {
-        //
+        Employee::find($id)->update($request->validated());
+        return back();
     }
 
     /**
@@ -63,8 +104,9 @@ class EmployeeController extends Controller
      * @param  \App\Models\Employee  $employee
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Employee $employee)
+    public function destroy($id)
     {
-        //
+        Employee::find($id)->delete();
+        return back();
     }
 }

@@ -1,11 +1,21 @@
 <script setup>
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
-import { Head, Link } from '@inertiajs/inertia-vue3';
+import { Head, Link, useForm  } from '@inertiajs/inertia-vue3';
 import Pagination from '@/components/Pagination.vue'
+import BreezeInput from '@/Components/Input.vue';
 
-defineProps({
-    companies: Object 
+const props = defineProps({
+    companies: Object
 })
+
+const form = useForm();
+
+function destroy(id) {
+    if (confirm("Are you sure you want to Delete?")) {
+        form.delete(route('companies.destroy', id));
+    }
+}
+
 </script>
 
 <template>
@@ -22,6 +32,14 @@ defineProps({
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 bg-white border-b border-gray-200">
+                        <div class="flex mb-5 justify-end">
+                            <Link
+                                className="px-6 py-2 text-white bg-green-500 rounded-md focus:outline-none"
+                                :href="route('companies.create')"
+                            >
+                                + Add New
+                            </Link>
+                        </div>
                         <table className="table-fixed w-full">
                             <thead>
                                 <tr>
@@ -30,6 +48,8 @@ defineProps({
                                     <th className="px-4 py-2">Email</th>
                                     <th className="px-4 py-2 w-20">Website</th>
                                     <th className="px-4 py-2 w-20">Employees</th>
+                                    <th className="px-4 py-2">Manage</th>
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -39,10 +59,31 @@ defineProps({
                                     <td className="border px-4 py-2">{{ email }}</td>
                                     <td className="border px-4 py-2"><Link :href="website" target="_blank" rel="noopener noreferrer">Visit</Link></td>
                                     <td className="border px-4 py-2"><Link :href="'/employees?company_id=' + id" target="_blank" rel="noopener noreferrer">View</Link></td>
+                                    <td className="border px-4 py-4 flex justify-center gap-2">
+                                        <Link
+                                            tabIndex="1"
+                                            className="px-4 py-2 text-sm text-white bg-blue-500 rounded"
+                                            :href="route('companies.edit', id)"
+                                        >
+                                            Edit
+                                        </Link>
+
+                                        <button
+                                            @click="destroy(id)"
+                                            tabIndex="-1"
+                                            type="button"
+                                            className="mx-1 px-4 py-2 text-sm text-white bg-red-500 rounded"
+                                        >
+                                            Delete
+                                        </button>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
-                        <Pagination class="mt-6" :links="companies.links" />
+                        <div class="flex justify-between items-center mt-8">
+                            <div><BreezeInput id="search" type="text" class="mt-1 block w-full" placeholder="Search"/></div>
+                            <Pagination :links="companies.links" />
+                        </div>
                     </div>
                 </div>
             </div>
