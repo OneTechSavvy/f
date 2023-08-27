@@ -1,8 +1,8 @@
 <script setup>
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
 import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
-import Pagination from '@/components/Pagination.vue'
-import BreezeInput from '@/Components/Input.vue';
+import Pagination from '@/components/Pagination.vue';
+import SearchInput from '@/components/SearchInput.vue';
 
 defineProps({
     employees: Object ,
@@ -11,7 +11,11 @@ defineProps({
 
 const form = useForm();
 
-function destroy(id) {
+const handleSearch = (searchTerm) => {
+    form.get(route('employees.index') + "?search=" + searchTerm)
+}
+
+const destroy = (id) => {
     if (confirm("Are you sure you want to Delete?")) {
         form.delete(route('employees.destroy', id));
     }
@@ -52,12 +56,12 @@ function destroy(id) {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="{id, first_name, last_name, email, company, phone} in employees.data" :key="id">
-                                    <td className="border px-4 py-2">{{ first_name + " " + last_name }}</td>
-                                    <td className="border px-4 py-2">{{ email }}</td>
-                                    <td className="border px-4 py-2">{{ company.name }}</td>
-                                    <td className="border px-4 py-2">{{ phone }}</td>
-                                    <td className="border px-4 py-2 flex justify-center gap-2">
+                                <tr v-for="{id, first_name, last_name, email, company, phone} in employees.data" :key="id" className="border">
+                                    <td className="px-4 py-2 break-words">{{ first_name + " " + last_name }}</td>
+                                    <td className="px-4 py-2 break-words">{{ email }}</td>
+                                    <td className="px-4 py-2 break-words">{{ company.name }}</td>
+                                    <td className="px-4 py-2 break-words">{{ phone }}</td>
+                                    <td className="px-4 py-2 break-words flex justify-center gap-2">
                                         <Link
                                             tabIndex="1"
                                             className="px-4 py-2 text-sm text-white bg-blue-500 rounded"
@@ -79,7 +83,9 @@ function destroy(id) {
                             </tbody>
                         </table>
                         <div class="flex justify-between items-center mt-8">
-                            <div><BreezeInput id="search" type="text" class="mt-1 block w-full" placeholder="Search"/></div>
+                            <div>
+                                <SearchInput class="mt-1 block w-full" @search="handleSearch"/>
+                            </div>
                             <Pagination :links="employees.links" :companyId = "company_id" />
                         </div>
                     </div>

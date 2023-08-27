@@ -26,12 +26,13 @@ class EmployeeController extends Controller
         if($company_id)
             $employees = $employees->where('company_id', $company_id);
         if($search)
-            $employees = $employees->where(function($query){
-                $query->where('first_name', 'like', '%{$search}%')
-                    ->orWhere('last_name', 'like', '%{$search}%')
-                    ->orWhere('email', 'like', '%{$search}%')
-                    ->orWhere('phone', 'like', '%{$search}%');
+            $employees = $employees->where(function($query) use ($search){
+                $query->where('first_name', 'like', '%' . $search . '%')
+                    ->orWhere('last_name', 'like', '%' . $search . '%')
+                    ->orWhere('email', 'like', '%' . $search . '%')
+                    ->orWhere('phone', 'like', '%' . $search . '%');
             });
+
         $employees = $employees->paginate(10);
         return Inertia::render('Employees/Index', compact("employees", "company_id"));
     }
@@ -108,5 +109,10 @@ class EmployeeController extends Controller
     {
         Employee::find($id)->delete();
         return back();
+    }
+
+    public function getList()
+    {
+        return EmployeeResource::collection(Employee::all());
     }
 }

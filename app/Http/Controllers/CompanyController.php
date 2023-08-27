@@ -98,4 +98,9 @@ class CompanyController extends Controller
         return back();
     }
 
+    public function getList()
+    {
+        return CompanyResource::collection(Company::all());
+    }
+
 }

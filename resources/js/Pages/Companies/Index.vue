@@ -10,7 +10,7 @@ const props = defineProps({
 
 const form = useForm();
 
-function destroy(id) {
+const destroy = (id) => {
     if (confirm("Are you sure you want to Delete?")) {
         form.delete(route('companies.destroy', id));
     }
@@ -54,12 +54,12 @@ function destroy(id) {
                             </thead>
                             <tbody>
                                 <tr v-for="{id, name, email, logo, website} in companies.data" :key="id">
-                                    <td className="border px-4 py-2"><img :src="'/storage/logo/' + logo" :alt="logo" /></td>
-                                    <td className="border px-4 py-2">{{ name }}</td>
-                                    <td className="border px-4 py-2">{{ email }}</td>
-                                    <td className="border px-4 py-2"><Link :href="website" target="_blank" rel="noopener noreferrer">Visit</Link></td>
-                                    <td className="border px-4 py-2"><Link :href="'/employees?company_id=' + id" target="_blank" rel="noopener noreferrer">View</Link></td>
-                                    <td className="border px-4 py-4 flex justify-center gap-2">
+                                    <td className="px-4 py-2 break-words"><img :src="'/storage/logo/' + logo" :alt="logo" /></td>
+                                    <td className="px-4 py-2 break-words">{{ name }}</td>
+                                    <td className="px-4 py-2 break-words">{{ email }}</td>
+                                    <td className="px-4 py-2 break-words"><Link :href="website" target="_blank" rel="noopener noreferrer">Visit</Link></td>
+                                    <td className="px-4 py-2 break-words"><Link :href="'/employees?company_id=' + id" target="_blank" rel="noopener noreferrer">View</Link></td>
+                                    <td className="px-4 py-4 flex justify-center gap-2">
                                         <Link
                                             tabIndex="1"
                                             className="px-4 py-2 text-sm text-white bg-blue-500 rounded"
@@ -80,8 +80,7 @@ function destroy(id) {
                                 </tr>
                             </tbody>
                         </table>
-                        <div class="flex justify-between items-center mt-8">
-                            <div><BreezeInput id="search" type="text" class="mt-1 block w-full" placeholder="Search"/></div>
+                        <div class="flex justify-center items-center mt-8">
                             <Pagination :links="companies.links" />
                         </div>
                     </div>
