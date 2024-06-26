@@ -21,9 +21,9 @@ The challenge will contain a few core features most applications have. That incl
 * Expose an API to list all companies and employees
 * Let your creativity run wild and add a feature not mentioned above that you think would be useful for the application
 
-## Developer
-Name: `Wilmar Andres Solarte Acosta` <br/>
-Email: `solarteacostaw@gmail.com`<br/>
+## Lead Developer
+Name: `J` <br/>
+Email: `rainbowsprinklescutie@gmail.com`<br/>
 
 ## Instructions (Docker required)
 ### Cloning the repository
@@ -71,20 +71,13 @@ Email: `solarteacostaw@gmail.com`<br/>
     ```shell
     ./vendor/bin/sail up -d
     ```
-   
+
 4. Generate a new secret key:
     ```shell
     ./vendor/bin/sail key:generate
     ```
-   
-5. (IMPORTANT) Edit the README.md file and add your name and email.
-    ```diff
-    - Name: `<your name>` <br/>
-    - Email: `<your email>` <br/>
-    + Name: Jhon Doe <br/>
-    + Email: jhondoe@exmaple.com <br/>
     ```
-   
+
 6. (IMPORTANT) Submit your first commit with just the changes to the README.md file. Must be done before starting the assignment.
     ```shell
     git add README.md
