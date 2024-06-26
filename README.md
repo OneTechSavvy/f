@@ -2,7 +2,7 @@
 
 
 # Company Management
-#### Skill Assessment
+#### FMTOD
 
 The challenge will contain a few core features most applications have. That includes basic MVC, exposing an API, CRM like features, and finally tests.
 
